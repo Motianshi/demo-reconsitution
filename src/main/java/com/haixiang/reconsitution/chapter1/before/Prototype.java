@@ -1,6 +1,6 @@
 package com.haixiang.reconsitution.chapter1.before;
 
-import com.haixiang.reconsitution.chapter1.Invoices;
+import com.haixiang.reconsitution.chapter1.Performance;
 import com.haixiang.reconsitution.chapter1.Plays;
 
 import java.util.Arrays;
@@ -19,15 +19,16 @@ public class Prototype {
 
         //构造账单数据
         invoicesMap.put("customer", "BigCo");
-        List<Invoices> invoicesList = Arrays.asList(
-                new Invoices("hamlet", 55),
-                new Invoices("as-like", 35),
-                new Invoices("othello", 40));
-        invoicesMap.put("performances", invoicesList);
+        List<Performance> performanceList = Arrays.asList(
+                new Performance("hamlet", 55),
+                new Performance("as-like", 35),
+                new Performance("othello", 40));
+        invoicesMap.put("performances", performanceList);
     }
 
     public static void main(String[] args) {
-//        System.out.println(statement());
+        Prototype prototype = new Prototype();
+        System.out.println(prototype.statement());
     }
 
     private String statement() {
@@ -35,7 +36,7 @@ public class Prototype {
         int volumeCredits = 0;
         String result = "Statement for " + invoicesMap.get("customer") + "\n";
 
-        for (Invoices perf : (List<Invoices>) invoicesMap.get("performances")) {
+        for (Performance perf : (List<Performance>) invoicesMap.get("performances")) {
             Plays play = playsMap.get(perf.getPlayID());
             int thisAmount = 0;
             switch (play.getType()) {
