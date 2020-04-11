@@ -12,16 +12,7 @@ public class PerformanceCalculator {
         this.plays = plays;
     }
 
-    public PerformanceCalculator createPerformanceCalculator() {
-        switch (plays.getType()) {
-            case "tragedy":
-                return new TragedyCalculator(performance,plays);
-            case "comedy":
-                return new ComedyCalculator(performance,plays);
-            default:
-                throw new Error("unknown type");
-        }
-    }
+
 
     public int amount() {
         return -1;

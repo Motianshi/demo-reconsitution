@@ -6,9 +6,12 @@ import com.haixiang.reconsitution.chapter1.Plays;
 public class TragedyCalculator extends PerformanceCalculator{
 
     private Performance performance;
+    private Plays plays;
 
     public TragedyCalculator(Performance performance, Plays plays) {
-        super(performance, plays);
+        super(performance,plays);
+        this.performance = performance;
+        this.plays = plays;
     }
 
     public int amount() {

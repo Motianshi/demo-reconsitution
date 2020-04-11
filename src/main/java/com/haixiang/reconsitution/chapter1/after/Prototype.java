@@ -2,11 +2,11 @@ package com.haixiang.reconsitution.chapter1.after;
 
 import com.haixiang.reconsitution.chapter1.Performance;
 import com.haixiang.reconsitution.chapter1.Plays;
+import sun.misc.Perf;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Prototype {
     Map<String, Plays> playsMap = new HashMap<>();
@@ -19,16 +19,19 @@ public class Prototype {
 
         //构造账单数据
         invoicesMap.put("customer", "BigCo");
-        List<Performance> performanceList = Arrays.asList(
+        List<Performance> performanceList = Stream.of(
                 new Performance("hamlet", 55),
                 new Performance("as-like", 35),
-                new Performance("othello", 40));
+                new Performance("othello", 40)
+        ).collect(Collectors.toList());
         invoicesMap.put("performances", performanceList);
     }
 
     public static void main(String[] args) {
         Prototype prototype = new Prototype();
         System.out.println(prototype.htmlStatement());
+        System.out.println("+++++++++++++++++++++++");
+        System.out.println(prototype.statement());
     }
 
     private String statement() {
@@ -46,6 +49,7 @@ public class Prototype {
         resultData.setVolumeCredits(totalVolumeCredits());
         return resultData;
     }
+
 
     private String renderPlainText(StateResultData statementData) {
         String result = "Statement for " + statementData.getCustomer() + "\n";
@@ -85,7 +89,7 @@ public class Prototype {
     private int totalVolumeCredits() {
         int volumeCredits = 0;
         for (Performance perf : (List<Performance>) invoicesMap.get("performances")) {
-            volumeCredits = volumeCreditsFor(perf);
+            volumeCredits += volumeCreditsFor(perf);
         }
         return volumeCredits;
     }
@@ -94,9 +98,20 @@ public class Prototype {
         return playsMap.get(perf.getPlayID());
     }
     private int volumeCreditsFor(Performance perf) {
-       return new PerformanceCalculator(perf, playFor(perf)).volumeCredit();
+       return createPerformanceCalculator(perf, playFor(perf)).volumeCredit();
     }
     private int amountFor(Performance perf) {
-        return new PerformanceCalculator(perf, playFor(perf)).amount();
+        return createPerformanceCalculator(perf, playFor(perf)).amount();
+    }
+
+    public PerformanceCalculator createPerformanceCalculator(Performance perf, Plays plays) {
+        switch (plays.getType()) {
+            case "tragedy":
+                return new TragedyCalculator(perf,plays);
+            case "comedy":
+                return new ComedyCalculator(perf,plays);
+            default:
+                throw new Error("unknown type");
+        }
     }
 }
